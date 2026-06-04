@@ -23,6 +23,17 @@ function createUserList() {
       routes: ['home'],
       token: 'System Token',
     },
+    {
+      userId: 3,
+      avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+      username: 'zhangsan',
+      password: '123456',
+      desc: '普通用户',
+      roles: ['普通用户'],
+      buttons: ['cuser.detail', 'cuser.user'],
+      routes: ['home'],
+      token: 'User Token',
+    },
   ]
 }
 //对外暴露一个数组:数组里面包含两个接口
