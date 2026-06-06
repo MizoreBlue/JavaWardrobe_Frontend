@@ -3,11 +3,13 @@
     <el-row>
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24">
-        <el-form class="login_form">
+        <el-form class="login_form" :model="loginForm" :rules="rules" ref="LoginForms">
           <h1>Hello</h1>
           <h2>网上衣橱管理后台</h2>
-          <el-form-item>
+          <el-form-item prop="username">
             <el-input placeholder="请输入用户名" :prefix-icon="User" v-model="loginForm.username"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
             <el-input placeholder="请输入密码" :prefix-icon="Lock" v-model="loginForm.password" show-password
               type="password">
             </el-input>
@@ -29,16 +31,39 @@ import { ElNotification } from 'element-plus'
 import useUserStore from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { reactive, ref } from 'vue'
+import { getTime } from '@/utils/time'
 
 const userStore = useUserStore()
 const $router = useRouter()
+//表单校验规则
+const usernameValidator = (rule: any, value: any, callback: any) => {
+  if (value.length < 5) {
+    callback(new Error('用户名不能小于5位'))
+  } else callback()
+}
+const passwordValidator = (rule: any, value: any, callback: any) => {
+  if (value.length < 6) {
+    callback(new Error('密码不能小于6位'))
+  } else callback()
+}
+const LoginForms = ref()
+const rules = {
+  username: { trigger: 'change', validator: usernameValidator },
+  password: { trigger: 'change', validator: passwordValidator },
+}
+
+
 let loading = ref(false)
 let loginForm = reactive({
   username: 'admin',
   password: '111111',
 })
 
+
+
+
 let login = async () => {
+  await LoginForms.value.validate() //用于表单校验，返回一个Promise对象
   loading.value = true
   try {
     // 发送一个登录请求
@@ -46,7 +71,8 @@ let login = async () => {
     // 登录成功
     ElNotification.success({
       type: 'success',
-      message: '登录成功'
+      message: '欢迎回来',
+      title: `Hi,${getTime()}好`
     })
     // 登录成功，跳转到管理员首页
     $router.push('/admin/')
@@ -61,6 +87,8 @@ let login = async () => {
     })
   }
 }
+
+
 </script>
 
 <style lang="scss" scoped>
