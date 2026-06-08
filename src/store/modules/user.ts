@@ -2,12 +2,14 @@
 import { defineStore } from 'pinia'
 import type { LoginForm } from '@/api/type'
 import { LoginAPI } from '@/api/user'
+import { constantRoutes } from '@/router/router'
 
 const useUserStore = defineStore('user', {
   // 小仓库存贮数据的地方
   state: () => {
     return {
       token: localStorage.getItem('token') || '', //用户唯一标识
+      menuList: constantRoutes,
     }
   },
   // 异步 | 逻辑
